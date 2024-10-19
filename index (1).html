@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tably オンライン会食サービス</title>
+    <style>
+        /* Reset and Tably Theme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: url('https://s2.best-wallpaper.net/wallpaper/7680x4320/1809/River-trees-mountain-nature-landscape_7680x4320.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ff9ff3;
+            min-height: 100vh;
+            display: block; /* フレックスを削除し、スクロールを許可 */
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1400px;
+            background-color: rgba(20, 20, 30, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 255, 255, 0.7);
+            border: 2px solid #ff6b81;
+            margin: 20px auto; /* 自動的にページの中央に */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 1em;
+            color: #feca57;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.7);
+        }
+
+        /* General button styling */
+        button, .zoom-link {
+            padding: 15px;
+            background: linear-gradient(135deg, #ff9ff3, #feca57);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            color: #222f3e;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover, .zoom-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 218, 185, 0.7);
+        }
+
+        .zoom-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            background: #576574;
+            color: #ff9ff3;
+            border: 2px solid #ff9ff3;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 2em;
+        }
+
+        .section h2 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #ff6b81;
+            text-shadow: 0 0 5px #ff9ff3;
+        }
+
+        .section-content {
+            padding: 15px;
+            background-color: rgba(30, 30, 40, 0.9);
+            border-radius: 10px;
+            border: 1px solid #feca57;
+            margin-bottom: 20px;
+        }
+
+        /* Photo upload section */
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .upload-section input {
+            padding: 10px;
+            background-color: #1e272e;
+            color: #ff9ff3;
+            border: 1px solid #ff6b81;
+            border-radius: 5px;
+        }
+
+        .upload-section button {
+            align-self: flex-start;
+        }
+
+        /* Messages section */
+        .message-section {
+            margin-bottom: 2em;
+        }
+
+        .message-list {
+            background-color: rgba(30, 30, 40, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            height: 300px;
+            overflow-y: auto;
+            border: 2px solid #1dd1a1;
+        }
+
+        .message {
+            background-color: #1e272e;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            color: #c8d6e5;
+        }
+
+        .message-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0b0c10;
+            color: #ff9ff3;
+            border: 1px solid #ff6b81;
+            border-radius: 5px;
+        }
+
+        /* Follow buttons */
+        .follow-button {
+            padding: 10px;
+            background-color: #1dd1a1;
+            color: #0b0c10;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .follow-button:hover {
+            background-color: #ff9ff3;
+        }
+
+        /* Post section */
+        .post {
+            background-color: #1e272e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #feca57;
+        }
+
+        .post img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .post-text {
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        /* Group Calls Section */
+        .zoom-group-calls {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .zoom-group-call {
+            background-color: rgba(40, 40, 60, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ff9ff3;
+            text-align: center;
+        }
+
+        .zoom-group-call h3 {
+            color: #feca57;
+        }
+
+        .zoom-group-call p {
+            color: #fff;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Tably オンライン会食サービス</h1>
+
+    <!-- Zoom通話のセクション -->
+    <div class="section">
+        <h2>グループ通話 (Zoomリンク)</h2>
+        <div class="zoom-group-calls" id="zoom-group-calls">
+            <!-- Zoomの募集が表示されます -->
+        </div>
+    </div>
+
+    <!-- 写真投稿セクション -->
+    <div class="section upload-section">
+        <h2>自然の写真の投稿</h2>
+        <div id="feed">
+            <!-- 自然の写真が表示されます -->
+        </div>
+    </div>
+
+    <!-- ダイレクトメッセージ機能 -->
+    <div class="section message-section">
+        <h2>ダイレクトメッセージ</h2>
+        <div class="message-list" id="message-list">
+            <!-- メッセージが表示されます -->
+        </div>
+        <input type="text" id="message-input" class="message-input" placeholder="メッセージを入力">
+        <button onclick="sendMessage()">送信</button>
+    </div>
+
+</div>
+
+<script>
+    // Zoom通話募集を生成する
+    function generateZoomCalls() {
+        const zoomGroupCalls = document.getElementById('zoom-group-calls');
+        const zoomTopics = ['ランチミーティング', 'クリエイティブな会話', 'コーヒーブレイク', '自然愛好者の集い', 'ビジネスディスカッション'];
+        const zoomTimes = ['10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
+
+        for (let i = 0; i < 5; i++) {
+            const zoomId = Math.floor(Math.random() * 90000000000) + 10000000000;
+            const topic = zoomTopics[i % zoomTopics.length];
+            const time = zoomTimes[i % zoomTimes.length];
+
+            const callDiv = document.createElement('div');
+            callDiv.classList.add('zoom-group-call');
+            callDiv.innerHTML = `
+                <h3>${topic}</h3>
+                <p>時間: ${time}</p>
+                <a href="https://zoom.us/j/${zoomId}" class="zoom-link" target="_blank">Zoomに参加</a>
+            `;
+
+            zoomGroupCalls.appendChild(callDiv);
+        }
+    }
+
+    // 自然の写真投稿を自動生成する
+    function generateNaturePhotos() {
+        const feed = document.getElementById('feed');
+        const naturePhotos = [
+            'https://source.unsplash.com/featured/?forest',
+            'https://source.unsplash.com/featured/?river',
+            'https://source.unsplash.com/featured/?mountain',
+            'https://source.unsplash.com/featured/?ocean',
+            'https://source.unsplash.com/featured/?wildlife'
+        ];
+        const captions = ['美しい森', '清流の音', '山の風景', '海の静寂', '野生の息吹'];
+
+        for (let i = 0; i < naturePhotos.length; i++) {
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('post');
+            postDiv.innerHTML = `
+                <img src="${naturePhotos[i]}" alt="自然の写真">
+                <p class="post-text">${captions[i]}</p>
+            `;
+            feed.appendChild(postDiv);
+        }
+    }
+
+    // メッセージ送信機能
+    function sendMessage() {
+        const messageInput = document.getElementById('message-input');
+        const messageList = document.getElementById('message-list');
+        const messageText = messageInput.value;
+
+        if (messageText.trim() === '') {
+            alert('メッセージを入力してください');
+            return;
+        }
+
+        const message = document.createElement('div');
+        message.classList.add('message');
+        message.textContent = messageText;
+        messageList.appendChild(message);
+        messageInput.value = '';
+    }
+
+    // 初期化
+    document.addEventListener('DOMContentLoaded', function() {
+        generateZoomCalls();  // Zoom通話募集を生成
+        generateNaturePhotos();  // 自然の写真を投稿
+    });
+</script>
+
+</body>
+</html>
+
+
+
+
+
